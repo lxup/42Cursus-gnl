@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "*.json.liquid": "json",
+        "*.yaml.liquid": "yaml",
+        "*.md.liquid": "markdown",
+        "*.js.liquid": "liquid-javascript",
+        "*.css.liquid": "liquid-css",
+        "*.scss.liquid": "liquid-scss",
+        "types.h": "c",
+        "stdlib.h": "c",
+        "unistd.h": "c",
+        "fcntl.h": "c"
+    }
+}
