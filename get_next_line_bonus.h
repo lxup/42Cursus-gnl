@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lquehec <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/16 09:55:13 by lquehec           #+#    #+#             */
-/*   Updated: 2023/10/16 09:55:13 by lquehec          ###   ########.fr       */
+/*   Created: 2023/10/16 18:42:21 by lquehec           #+#    #+#             */
+/*   Updated: 2023/10/16 18:42:21 by lquehec          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # include <unistd.h>
 # include <stdlib.h>
@@ -30,11 +30,11 @@ typedef struct s_list
 }	t_list;
 
 char	*get_next_line(int fd);
-void	ft_init(int fd, t_list **list, int *bytes_read);
 void	ft_lstfree(t_list *list);
 void	ft_lstclean(t_list **list);
 void	ft_get_line(t_list *list, char **line);
 void	ft_create_line(t_list *list, char **line);
+void	read_and_stash(int fd, t_list **list, int *bytes_read);
 void	ft_lstadd_back(t_list **list, char *buffer, int bytes_read);
 
 // Utils

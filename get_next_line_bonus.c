@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lquehec <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/16 09:53:19 by lquehec           #+#    #+#             */
-/*   Updated: 2023/10/16 09:53:19 by lquehec          ###   ########.fr       */
+/*   Created: 2023/10/16 18:42:17 by lquehec           #+#    #+#             */
+/*   Updated: 2023/10/16 18:42:17 by lquehec          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	ft_lstclean(t_list **list)
 {
@@ -92,7 +92,7 @@ void	ft_create_line(t_list *list, char **line)
 	*line = (char *)malloc(sizeof(char) * (len + 1));
 }
 
-void	ft_init(int fd, t_list **list, int *bytes_read)
+void	read_and_stash(int fd, t_list **list, int *bytes_read)
 {
 	char	*buffer;
 
@@ -123,7 +123,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	bytes_read = 1;
 	line = NULL;
-	ft_init(fd, &list, &bytes_read);
+	read_and_stash(fd, &list, &bytes_read);
 	if (list == NULL)
 		return (NULL);
 	ft_get_line(list, &line);
