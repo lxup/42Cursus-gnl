@@ -6,7 +6,7 @@
 /*   By: lquehec <lquehec@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 20:08:17 by lquehec           #+#    #+#             */
-/*   Updated: 2023/11/07 20:08:18 by lquehec          ###   ########.fr       */
+/*   Updated: 2023/11/08 12:21:15 by lquehec          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,5 @@ size_t	ft_strlen(const char *s);
 int		ft_lstchr(t_list *stash, char c);
 t_list	*ft_lstlast(t_list *lst);
 t_list	*ft_lstnew(char *content, size_t size);
+
 #endif

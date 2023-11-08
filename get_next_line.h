@@ -6,7 +6,7 @@
 /*   By: lquehec <lquehec@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 20:07:48 by lquehec           #+#    #+#             */
-/*   Updated: 2023/11/07 20:07:49 by lquehec          ###   ########.fr       */
+/*   Updated: 2023/11/08 12:23:30 by lquehec          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,5 @@ void	ft_lstadd_back(t_list **list, char *buffer, int bytes_read);
 size_t	ft_strlen(const char *s);
 int		ft_lstchr(t_list *stash, char c);
 t_list	*ft_lstlast(t_list *lst);
-t_list	*ft_lstnew(char *content, size_t size);
+
 #endif
