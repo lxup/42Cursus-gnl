@@ -6,13 +6,11 @@
 /*   By: lquehec <lquehec@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 20:08:13 by lquehec           #+#    #+#             */
-/*   Updated: 2023/11/07 20:08:14 by lquehec          ###   ########.fr       */
+/*   Updated: 2023/11/13 21:29:34 by lquehec          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
-
-// Get the last item of a linked list
 
 t_list	*ft_lstlast(t_list *lst)
 {
@@ -20,8 +18,6 @@ t_list	*ft_lstlast(t_list *lst)
 		lst = lst->next;
 	return (lst);
 }
-
-// Create new item and add it at the end of a linked list
 
 void	ft_lstadd_back(t_list **list, char *buffer, int bytes_read)
 {
@@ -51,8 +47,6 @@ void	ft_lstadd_back(t_list **list, char *buffer, int bytes_read)
 		last->next = new;
 	}
 }
-
-// Search inside linked list content if there is a specific character
 
 int	ft_lstchr(t_list *stash, char c)
 {
