@@ -6,7 +6,7 @@
 /*   By: lquehec <lquehec@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 20:07:52 by lquehec           #+#    #+#             */
-/*   Updated: 2023/11/07 20:07:53 by lquehec          ###   ########.fr       */
+/*   Updated: 2023/11/13 18:49:31 by lquehec          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,12 +144,24 @@ char	*get_next_line(int fd)
 
 // 	int		fd;
 // 	char	*line;
+// 	int		i;
 
-// 	fd = open("file.txt", O_RDONLY);
+// 	fd = open("files/file1", O_RDONLY);
 // 	if (fd < 0) 
 // 		return (1);
-// 	line = get_next_line(fd);
-// 	printf("Ligne: %s\n", line);
-// 	free(line);
+// 	i = 1;
+// 	while(i)
+// 	{
+// 		line = get_next_line(fd);
+// 		if (!line)
+// 		{
+// 			i = 0;
+// 			printf("PLUS DE REULTAT\n");
+// 			free(line);
+// 			break;	
+// 		}
+// 		printf("Ligne: %s\n", line);
+// 		free(line);
+// 	}
 // 	return (0);
 // }

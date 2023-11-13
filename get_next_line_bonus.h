@@ -6,7 +6,7 @@
 /*   By: lquehec <lquehec@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 20:08:17 by lquehec           #+#    #+#             */
-/*   Updated: 2023/11/08 12:21:15 by lquehec          ###   ########.fr       */
+/*   Updated: 2023/11/13 19:29:27 by lquehec          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 10
+# endif
+
+# ifndef FD_SIZE
+#  define FD_SIZE 1048576
 # endif
 
 typedef struct s_list

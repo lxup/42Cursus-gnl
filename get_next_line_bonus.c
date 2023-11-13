@@ -6,7 +6,7 @@
 /*   By: lquehec <lquehec@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 20:08:20 by lquehec           #+#    #+#             */
-/*   Updated: 2023/11/07 20:08:21 by lquehec          ###   ########.fr       */
+/*   Updated: 2023/11/13 20:49:41 by lquehec          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	ft_lstclean(t_list **list)
 
 	clean = (t_list *)malloc(sizeof(t_list));
 	if (list == NULL || clean == NULL)
-		return ;
+		return (ft_lstfree(clean));
 	clean->next = NULL;
 	last = ft_lstlast(*list);
 	i = 0;
@@ -115,7 +115,7 @@ void	read_and_stash(int fd, t_list **list, int *bytes_read)
 
 char	*get_next_line(int fd)
 {
-	static t_list	*list;
+	static t_list	*list[FD_SIZE];
 	char			*line;
 	int				bytes_read;
 
@@ -123,15 +123,15 @@ char	*get_next_line(int fd)
 		return (NULL);
 	bytes_read = 1;
 	line = NULL;
-	read_and_stash(fd, &list, &bytes_read);
-	if (list == NULL)
+	read_and_stash(fd, &list[fd], &bytes_read);
+	if (list[fd] == NULL)
 		return (NULL);
-	ft_get_line(list, &line);
-	ft_lstclean(&list);
+	ft_get_line(list[fd], &line);
+	ft_lstclean(&list[fd]);
 	if (*line == '\0')
 	{
-		ft_lstfree(list);
-		list = NULL;
+		ft_lstfree(list[fd]);
+		list[fd] = NULL;
 		free(line);
 		return (NULL);
 	}
@@ -142,14 +142,40 @@ char	*get_next_line(int fd)
 // {
 // 	#include <stdio.h>
 
-// 	int		fd;
+// 	int		fd[4];
 // 	char	*line;
+// 	int		i;
 
-// 	fd = open("file.txt", O_RDONLY);
-// 	if (fd < 0) 
+// 	fd[0] = open("files/file1", O_RDWR);
+// 	fd[1] = open("files/file2", O_RDWR);
+// 	fd[2] = open("files/file3", O_RDWR);
+// 	if (fd[0] < 0 || fd[1] < 0 || fd[2] < 0) 
 // 		return (1);
-// 	line = get_next_line(fd);
-// 	printf("Ligne: %s\n", line);
-// 	free(line);
+// 	i = 1;
+// 	while(i)
+// 	{
+// 		if (i > 1)
+// 			printf("\n");
+// 		printf("==========LIGNE %d==========\n", i);
+// 		line = get_next_line(fd[0]);
+// 		if (!line) i = 0;
+// 		printf("F1: %s\n", line);
+// 		free(line);
+// 		line = get_next_line(fd[1]);
+// 		if (!line) i = 0;
+// 		printf("F2: %s\n", line);
+// 		free(line);
+// 		line = get_next_line(fd[2]);
+// 		if (!line) i = 0;
+// 		printf("F3: %s\n", line);
+// 		free(line);
+// 		if (!i)
+// 		{
+// 			printf("PLUS DE REULTAT\n");
+// 			break;	
+// 		}
+// 		printf("==========LIGNE %d==========\n", i);
+// 		i++;
+// 	}
 // 	return (0);
 // }
