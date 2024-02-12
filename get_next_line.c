@@ -6,162 +6,92 @@
 /*   By: lquehec <lquehec@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 20:07:52 by lquehec           #+#    #+#             */
-/*   Updated: 2023/11/13 18:49:31 by lquehec          ###   ########.fr       */
+/*   Updated: 2024/02/12 18:48:40 by lquehec          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void	ft_lstclean(t_list **list)
+int	find_nl(char *s, ssize_t *len)
 {
-	int		i;
-	int		j;
-	t_list	*last;
-	t_list	*clean;
+	size_t	i;
 
-	clean = (t_list *)malloc(sizeof(t_list));
-	if (list == NULL || clean == NULL)
-		return ;
-	clean->next = NULL;
-	last = ft_lstlast(*list);
 	i = 0;
-	while (last->content[i] && last->content[i] != '\n')
+	while (s[i] && s[i] != '\n')
 		i++;
-	if (last->content && last->content[i] == '\n')
-		i++;
-	clean->content = malloc(sizeof(char) *((ft_strlen(last->content) - i) + 1));
-	if (clean->content == NULL)
-		return ;
-	j = 0;
-	while (last->content[i])
-		clean->content[j++] = last->content[i++];
-	clean->content[j] = '\0';
-	ft_lstfree(*list);
-	*list = clean;
+	if (s[i] == '\n')
+		return (*len += i + 1, 1);
+	*len += i;
+	return (0);
 }
 
-void	ft_get_line(t_list *list, char **line)
+void	ft_strlcpy(char *dst, const char *src, size_t size)
 {
-	int	i;
-	int	j;
+	size_t	i;
 
-	if (list == NULL)
-		return ;
-	ft_create_line(list, line);
-	if (*line == NULL)
-		return ;
-	j = 0;
-	while (list)
+	i = 0;
+	while (src[i] && i + 1 < size)
 	{
-		i = 0;
-		while (list->content[i])
-		{
-			if (list->content[i] == '\n')
-			{
-				(*line)[j++] = list->content[i];
-				break ;
-			}
-			(*line)[j++] = list->content[i++];
-		}
-		list = list->next;
+		dst[i] = src[i];
+		++i;
 	}
-	(*line)[j] = '\0';
+	if (size)
+		dst[i] = 0;
 }
 
-void	ft_create_line(t_list *list, char **line)
+int	read_file(int fd, t_string *string)
 {
-	int	i;
-	int	len;
+	ssize_t	read_ret;
+	ssize_t	ret;
+	char	*tmp;
 
-	len = 0;
-	while (list)
+	ret = 0;
+	read_ret = BUFFER_SIZE;
+	while (!find_nl(string->content + ret, &ret) && read_ret == BUFFER_SIZE)
 	{
-		i = 0;
-		while (list->content[i])
+		if (string->len + BUFFER_SIZE >= string->max_size)
 		{
-			if (list->content[i] == '\n')
-			{
-				len++;
-				break ;
-			}
-			len++;
-			i++;
+			tmp = malloc(string->max_size * 2);
+			if (!tmp)
+				return (-1);
+			ft_strlcpy(tmp, string->content, string->len + 1);
+			free(string->content);
+			string->content = tmp;
+			string->max_size *= 2;
 		}
-		list = list->next;
+		read_ret = read(fd, string->content + string->len, BUFFER_SIZE);
+		if (read_ret == -1)
+			return (-1);
+		string->len += read_ret;
+		string->content[string->len] = 0;
 	}
-	*line = (char *)malloc(sizeof(char) * (len + 1));
-}
-
-void	ft_init(int fd, t_list **list, int *bytes_read)
-{
-	char	*buffer;
-
-	while (!ft_lstchr(*list, '\n') && *bytes_read != 0)
-	{
-		buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-		if (buffer == NULL)
-			return ;
-		*bytes_read = (int)read(fd, buffer, BUFFER_SIZE);
-		if ((*list == NULL && *bytes_read == 0) || *bytes_read == -1)
-		{
-			free(buffer);
-			return ;
-		}
-		buffer[*bytes_read] = '\0';
-		ft_lstadd_back(list, buffer, *bytes_read);
-		free(buffer);
-	}
+	return (ret);
 }
 
 char	*get_next_line(int fd)
 {
-	static t_list	*list;
-	char			*line;
-	int				bytes_read;
+	ssize_t		line_len;
+	char		*ret;
+	t_string	string;
+	static char	save[BUFFER_SIZE] = {0};
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || (int)read(fd, &line, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
-	bytes_read = 1;
-	line = NULL;
-	ft_init(fd, &list, &bytes_read);
-	if (list == NULL)
+	string.max_size = BUFFER_SIZE + 1;
+	string.content = malloc(string.max_size);
+	if (!string.content)
 		return (NULL);
-	ft_get_line(list, &line);
-	ft_lstclean(&list);
-	if (*line == '\0')
-	{
-		ft_lstfree(list);
-		list = NULL;
-		free(line);
-		return (NULL);
-	}
-	return (line);
+	string.len = 0;
+	while (save[string.len])
+		string.len++;
+	ft_strlcpy(string.content, save, string.len + 1);
+	line_len = read_file(fd, &string);
+	if (line_len == -1 || !*string.content)
+		return (free(string.content), NULL);
+	ret = malloc(line_len + 1);
+	if (!ret)
+		return (free(string.content), NULL);
+	ft_strlcpy(ret, string.content, line_len + 1);
+	ft_strlcpy(save, string.content + line_len, string.len - line_len + 1);
+	return (free(string.content), ret);
 }
-
-// int	main(void)
-// {
-// 	#include <stdio.h>
-
-// 	int		fd;
-// 	char	*line;
-// 	int		i;
-
-// 	fd = open("files/file1", O_RDONLY);
-// 	if (fd < 0) 
-// 		return (1);
-// 	i = 1;
-// 	while(i)
-// 	{
-// 		line = get_next_line(fd);
-// 		if (!line)
-// 		{
-// 			i = 0;
-// 			printf("PLUS DE REULTAT\n");
-// 			free(line);
-// 			break;	
-// 		}
-// 		printf("Ligne: %s\n", line);
-// 		free(line);
-// 	}
-// 	return (0);
-// }
