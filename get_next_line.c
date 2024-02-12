@@ -6,7 +6,7 @@
 /*   By: lquehec <lquehec@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 20:07:52 by lquehec           #+#    #+#             */
-/*   Updated: 2024/02/12 18:48:40 by lquehec          ###   ########.fr       */
+/*   Updated: 2024/02/12 22:33:39 by lquehec          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	find_nl(char *s, ssize_t *len)
 	return (0);
 }
 
-void	ft_strlcpy(char *dst, const char *src, size_t size)
+void	ft_strlcpy_gnl(char *dst, const char *src, size_t size)
 {
 	size_t	i;
 
@@ -54,7 +54,7 @@ int	read_file(int fd, t_string *string)
 			tmp = malloc(string->max_size * 2);
 			if (!tmp)
 				return (-1);
-			ft_strlcpy(tmp, string->content, string->len + 1);
+			ft_strlcpy_gnl(tmp, string->content, string->len + 1);
 			free(string->content);
 			string->content = tmp;
 			string->max_size *= 2;
@@ -84,14 +84,14 @@ char	*get_next_line(int fd)
 	string.len = 0;
 	while (save[string.len])
 		string.len++;
-	ft_strlcpy(string.content, save, string.len + 1);
+	ft_strlcpy_gnl(string.content, save, string.len + 1);
 	line_len = read_file(fd, &string);
 	if (line_len == -1 || !*string.content)
 		return (free(string.content), NULL);
 	ret = malloc(line_len + 1);
 	if (!ret)
 		return (free(string.content), NULL);
-	ft_strlcpy(ret, string.content, line_len + 1);
-	ft_strlcpy(save, string.content + line_len, string.len - line_len + 1);
+	ft_strlcpy_gnl(ret, string.content, line_len + 1);
+	ft_strlcpy_gnl(save, string.content + line_len, string.len - line_len + 1);
 	return (free(string.content), ret);
 }
